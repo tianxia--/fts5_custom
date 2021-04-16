@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+configurations {
+    debugCompile
+    releaseCompile
+}
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+        applicationId "org.sqlite.customsqlitetest"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        myConfig {
+            storeFile rootProject.file('key.jks')
+            storePassword '123456'
+            keyAlias 'key'
+            keyPassword '123456'
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled false
+            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation project(':sqlite3')
+//    implementation project(path: ':sqlite3', configuration: 'debug')
+//    implementation project(path: ':sqlite3', configuration: 'release')
+
+
+    implementation 'androidx.sqlite:sqlite:2.1.0'
+    compile(name: 'sqlcipher-4.4.2-release', ext: 'aar')
+}
